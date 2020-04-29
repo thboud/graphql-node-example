@@ -1,8 +1,11 @@
 import { ApolloServer } from "apollo-server-express";
 import express from "express";
 import mongoose from "mongoose";
+
 import { resolvers } from "./resolvers/";
 import { typeDefs } from "./schemas/";
+
+import { API_PORT, MONGO_URL } from "./config/";
 
 const startServer = async () => {
   try {
@@ -14,14 +17,14 @@ const startServer = async () => {
 
     server.applyMiddleware({ app });
 
-    await mongoose.connect("mongodb://localhost:27017/graphql_example", {
+    await mongoose.connect(MONGO_URL, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
 
-    app.listen({ port: 4000 }, () =>
+    app.listen({ port: API_PORT }, () =>
       console.log(
-        `🚀 Server ready at http://localhost:4000${server.graphqlPath}`
+        `🚀 Server ready at http://localhost:${API_PORT}${server.graphqlPath}`
       )
     );
   } catch (err) {
